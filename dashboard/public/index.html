@@ -3,152 +3,300 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>agents-factory — Dashboard</title>
+<title>agents-factory — Painel de Comando</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-  :root { --bg:#0b0f17; --card:#141a26; --border:#1f2937; --txt:#e5e7eb; --mute:#9ca3af; --ok:#10b981; --warn:#f59e0b; --err:#ef4444; --accent:#6366f1; }
-  * { box-sizing:border-box; }
-  body { margin:0; font-family:-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--txt); }
-  header { padding:20px 28px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
-  h1 { margin:0; font-size:18px; font-weight:600; }
-  .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
-  .badge.ok { background:rgba(16,185,129,.15); color:var(--ok); }
-  .badge.warn { background:rgba(245,158,11,.15); color:var(--warn); }
-  .badge.err { background:rgba(239,68,68,.15); color:var(--err); }
-  main { display:grid; grid-template-columns: 320px 1fr; gap:20px; padding:20px; }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
-  .card h2 { margin:0 0 12px; font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:var(--mute); }
-  .row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
-  .row:last-child { border-bottom:none; }
-  .row .name { font-size:13px; }
-  textarea { width:100%; min-height:90px; background:#0b0f17; color:var(--txt); border:1px solid var(--border); border-radius:8px; padding:10px; font-family:inherit; font-size:13px; resize:vertical; }
-  select, input { width:100%; background:#0b0f17; color:var(--txt); border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:13px; }
-  button { background:var(--accent); color:white; border:none; border-radius:8px; padding:10px 18px; font-weight:600; cursor:pointer; font-size:13px; }
-  button:disabled { opacity:.5; cursor:not-allowed; }
-  button:hover:not(:disabled) { filter:brightness(1.1); }
-  .label { font-size:11px; text-transform:uppercase; color:var(--mute); margin:14px 0 6px; letter-spacing:.5px; }
-  .runs { max-height:600px; overflow-y:auto; }
-  .run { padding:10px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; cursor:pointer; transition:border-color .15s; }
-  .run:hover { border-color:var(--accent); }
-  .run .meta { font-size:11px; color:var(--mute); margin-top:4px; }
-  pre { background:#0b0f17; border:1px solid var(--border); border-radius:8px; padding:12px; overflow-x:auto; font-size:12px; color:var(--mute); }
-  .empty { color:var(--mute); font-size:12px; padding:8px 0; }
-  details summary { cursor:pointer; font-size:12px; color:var(--mute); margin-top:6px; }
-  details[open] summary { color:var(--txt); }
+  body{background:#fcfaf8;color:#3b332d;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif}
+  .glass-panel{background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border:1px solid rgba(220,210,200,.5);box-shadow:0 4px 6px -1px rgba(0,0,0,.05),0 2px 4px -1px rgba(0,0,0,.03)}
+  .btn-primary{background:#c08457;color:#fff;transition:background .3s}
+  .btn-primary:hover{background:#a87148}
+  .status-pulse{animation:pulse 2s infinite}
+  @keyframes pulse{0%{transform:scale(.95);box-shadow:0 0 0 0 rgba(74,222,128,.7)}70%{transform:scale(1);box-shadow:0 0 0 10px rgba(74,222,128,0)}100%{transform:scale(.95);box-shadow:0 0 0 0 rgba(74,222,128,0)}}
+  .loader{border:4px solid rgba(192,132,87,.3);border-top:4px solid #c08457;border-radius:50%;width:32px;height:32px;animation:spin 1s linear infinite}
+  @keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}
+  .chart-container{position:relative;width:100%;height:280px}
+  .chart-container-small{position:relative;width:100%;height:240px}
+  .badge{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:3px 8px;border-radius:999px;font-weight:600}
+  .badge-ok{background:#dcfce7;color:#166534}
+  .badge-err{background:#fee2e2;color:#991b1b}
+  .badge-warn{background:#fef3c7;color:#92400e}
 </style>
 </head>
-<body>
-<header>
-  <h1>🏭 agents-factory <span class="badge ok" id="health">online</span></h1>
-  <span class="badge ok" id="version">v0.1</span>
-</header>
+<body class="min-h-screen flex flex-col antialiased">
 
-<main>
-  <aside>
-    <div class="card">
-      <h2>Integrações</h2>
-      <div id="integrations"><div class="empty">carregando...</div></div>
+<nav class="glass-panel sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+  <div class="flex items-center space-x-3">
+    <span class="text-2xl">🤖</span>
+    <div>
+      <h1 class="text-xl font-bold tracking-tight">agents-factory</h1>
+      <p class="text-xs text-gray-500">Painel de Comando — IA de Vendas</p>
+    </div>
+  </div>
+  <div class="flex items-center space-x-3">
+    <div id="healthBadge" class="flex items-center space-x-2 bg-green-50 px-3 py-1.5 rounded-full border border-green-200">
+      <div class="w-3 h-3 bg-green-500 rounded-full status-pulse"></div>
+      <span class="text-sm font-medium text-green-700 hidden sm:inline">Online</span>
+    </div>
+    <button id="btnRefresh" class="p-2 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors" title="Atualizar">↻</button>
+  </div>
+</nav>
+
+<main class="flex-grow p-4 sm:p-6 w-full max-w-7xl mx-auto space-y-6">
+
+  <!-- Visão geral -->
+  <section class="glass-panel p-6 rounded-2xl">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div>
+        <h2 class="text-2xl font-semibold mb-1">Visão Geral</h2>
+        <p class="text-gray-600 text-sm">CEO → 8 Diretores → 19 Workers. Roteia briefings para a área certa via Claude.</p>
+      </div>
+      <button id="btnInsight" class="btn-primary text-sm px-5 py-2.5 rounded-xl font-medium shadow-md">
+        ✨ Pedir Insight ao CEO
+      </button>
     </div>
 
-    <div class="card" style="margin-top:16px;">
-      <h2>Produtos</h2>
-      <div id="products"><div class="empty">carregando...</div></div>
-    </div>
-  </aside>
-
-  <section>
-    <div class="card">
-      <h2>Disparar Briefing pro CEO</h2>
-      <div class="label">Produto</div>
-      <select id="product-select"><option value="">(geral, sem produto)</option></select>
-      <div class="label">Briefing</div>
-      <textarea id="briefing" placeholder="Ex: Pauta de conteúdo da semana, foco em parcerias com microinfluencers de finanças. Gerar 7 reels + 3 emails + 5 sugestões de criadores."></textarea>
-      <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
-        <button id="run-btn">🚀 Disparar</button>
-        <span id="run-status" class="badge"></span>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <span class="text-xs text-gray-500 font-medium uppercase">Produtos</span>
+        <div class="mt-1 text-3xl font-bold text-gray-800" id="kpiProdutos">—</div>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <span class="text-xs text-gray-500 font-medium uppercase">Integrações OK</span>
+        <div class="mt-1 text-3xl font-bold text-gray-800" id="kpiIntegracoes">—</div>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <span class="text-xs text-gray-500 font-medium uppercase">Execuções</span>
+        <div class="mt-1 text-3xl font-bold text-gray-800" id="kpiRuns">—</div>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-gray-100 shadow-sm">
+        <span class="text-xs text-gray-500 font-medium uppercase">Última Execução</span>
+        <div class="mt-1 text-sm font-bold text-gray-800" id="kpiUltima">nenhuma</div>
       </div>
     </div>
+  </section>
 
-    <div class="card" style="margin-top:16px;">
-      <h2>Últimas execuções</h2>
-      <div id="runs" class="runs"><div class="empty">carregando...</div></div>
+  <!-- Disparar briefing + Integrações -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <section class="glass-panel p-6 rounded-2xl lg:col-span-2">
+      <h3 class="text-xl font-semibold mb-1">🎯 Disparar Briefing</h3>
+      <p class="text-sm text-gray-600 mb-4">CEO analisa e roteia para os diretores. Workers executam em paralelo.</p>
+      <form id="formRun" class="space-y-3">
+        <div>
+          <label class="text-xs font-medium text-gray-600 uppercase">Produto</label>
+          <select id="selProduto" class="mt-1 w-full p-2.5 border border-gray-300 rounded-lg bg-white text-sm focus:ring-[#c08457] focus:border-[#c08457] outline-none">
+            <option value="">— escolha —</option>
+          </select>
+        </div>
+        <div>
+          <label class="text-xs font-medium text-gray-600 uppercase">Briefing</label>
+          <textarea id="txtBriefing" rows="4" placeholder="Ex: lançar campanha de Black Friday no IG e TikTok, recuperar carrinhos abandonados, criar 3 posts pra essa semana"
+            class="mt-1 w-full p-2.5 border border-gray-300 rounded-lg bg-white text-sm focus:ring-[#c08457] focus:border-[#c08457] outline-none resize-none"></textarea>
+        </div>
+        <button type="submit" id="btnRun" class="btn-primary px-5 py-2.5 rounded-xl text-sm font-medium shadow-md">
+          🚀 Executar
+        </button>
+      </form>
+    </section>
+
+    <section class="glass-panel p-6 rounded-2xl">
+      <h3 class="text-xl font-semibold mb-1">🔌 Integrações</h3>
+      <p class="text-sm text-gray-600 mb-4">Status das chaves no <code>.env</code>.</p>
+      <ul id="listIntegracoes" class="space-y-2 text-sm max-h-80 overflow-y-auto"></ul>
+    </section>
+  </div>
+
+  <!-- Produtos + Distribuição -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <section class="glass-panel p-6 rounded-2xl">
+      <h3 class="text-xl font-semibold mb-1">📦 Produtos</h3>
+      <p class="text-sm text-gray-600 mb-4">Catálogo carregado de <code>products/</code>.</p>
+      <ul id="listProdutos" class="space-y-2 text-sm"></ul>
+    </section>
+
+    <section class="glass-panel p-6 rounded-2xl flex flex-col">
+      <h3 class="text-xl font-semibold mb-1">📊 Execuções por Status</h3>
+      <p class="text-sm text-gray-600 mb-4">Histórico das últimas 50 runs.</p>
+      <div class="chart-container-small flex-grow"><canvas id="runsChart"></canvas></div>
+    </section>
+  </div>
+
+  <!-- Feed de runs -->
+  <section class="glass-panel p-6 rounded-2xl">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-3">
+      <div>
+        <h3 class="text-xl font-semibold">📜 Terminal de Operações</h3>
+        <p class="text-sm text-gray-600">Últimas execuções da fábrica.</p>
+      </div>
+      <select id="feedFilter" class="bg-gray-50 border border-gray-300 text-sm rounded-lg p-2.5 outline-none focus:ring-[#c08457]">
+        <option value="all">Todas</option>
+        <option value="ok">Sucesso</option>
+        <option value="error">Erro</option>
+      </select>
+    </div>
+    <div class="bg-white rounded-xl border border-gray-100">
+      <ul id="feedRuns" class="divide-y divide-gray-100 max-h-96 overflow-y-auto"></ul>
     </div>
   </section>
+
 </main>
 
+<footer class="bg-[#3b332d] text-white py-5 text-center text-sm mt-8">
+  <p>agents-factory © 2026 — fábrica autônoma de vendas com Claude</p>
+</footer>
+
+<!-- Modal -->
+<div id="modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center bg-black bg-opacity-40 backdrop-blur-sm p-4">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-2xl shadow-2xl relative border border-gray-200 max-h-[80vh] flex flex-col">
+    <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-3xl leading-none">×</button>
+    <h3 id="modalTitle" class="text-xl font-bold mb-4 text-[#3b332d]">Detalhes</h3>
+    <div id="modalContent" class="text-gray-700 overflow-y-auto p-4 bg-gray-50 rounded-lg border border-gray-100 text-sm leading-relaxed flex-grow"></div>
+  </div>
+</div>
+
 <script>
-async function fetchJSON(url, opts) {
-  const r = await fetch(url, opts);
-  if (!r.ok) throw new Error((await r.json()).error || r.statusText);
+const $ = id => document.getElementById(id);
+const fmt = ts => new Date(ts).toLocaleString('pt-BR');
+let runsChart = null;
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error(`${path}: ${r.status}`);
   return r.json();
 }
 
-function badge(text, cls = '') { return `<span class="badge ${cls}">${text}</span>`; }
+function openModal(title, html) {
+  $('modalTitle').innerText = title;
+  $('modalContent').innerHTML = html;
+  $('modal').classList.remove('hidden');
+}
+$('closeModal').onclick = () => $('modal').classList.add('hidden');
 
-async function loadIntegrations() {
-  const list = await fetchJSON('/api/integrations');
-  document.getElementById('integrations').innerHTML = list.map(i => `
-    <div class="row">
-      <span class="name">${i.nome}${i.required ? ' *' : ''}</span>
-      ${i.configurado ? badge('OK', 'ok') : badge('—', i.required ? 'err' : 'warn')}
-    </div>
+async function loadIntegracoes() {
+  const list = await api('/api/integrations');
+  $('listIntegracoes').innerHTML = list.map(i => `
+    <li class="flex items-center justify-between p-2 bg-white rounded border border-gray-100">
+      <span class="font-medium">${i.nome}</span>
+      <span class="badge ${i.configurado ? 'badge-ok' : (i.required ? 'badge-err' : 'badge-warn')}">
+        ${i.configurado ? '✓ ok' : (i.required ? '✗ obrigatória' : '○ falta')}
+      </span>
+    </li>
   `).join('');
+  $('kpiIntegracoes').innerText = `${list.filter(i=>i.configurado).length}/${list.length}`;
 }
 
-async function loadProducts() {
-  const list = await fetchJSON('/api/products');
-  document.getElementById('products').innerHTML = list.length
-    ? list.map(p => `<div class="row"><span class="name">${p.nome}<br><small style="color:var(--mute);">${p.tipo} · R$${p.preco}</small></span></div>`).join('')
-    : '<div class="empty">nenhum produto. Use <code>npm run new-product</code></div>';
-
-  const sel = document.getElementById('product-select');
-  sel.innerHTML = '<option value="">(geral, sem produto)</option>' + list.map(p => `<option value="${p.slug}">${p.nome}</option>`).join('');
+async function loadProdutos() {
+  const list = await api('/api/products');
+  $('kpiProdutos').innerText = list.length;
+  $('selProduto').innerHTML = '<option value="">— escolha —</option>' +
+    list.map(p => `<option value="${p.slug}">${p.nome || p.slug}</option>`).join('');
+  $('listProdutos').innerHTML = list.length === 0
+    ? '<li class="text-gray-500">nenhum produto encontrado</li>'
+    : list.map(p => `
+      <li class="flex items-center justify-between p-3 bg-white rounded border border-gray-100">
+        <div>
+          <div class="font-medium">${p.nome || p.slug}</div>
+          <div class="text-xs text-gray-500">${p.tipo || '—'} ${p.preco ? '· R$ '+p.preco : ''}</div>
+        </div>
+        <span class="badge badge-ok">${p.status || 'ativo'}</span>
+      </li>
+    `).join('');
 }
 
-async function loadRuns() {
-  const list = await fetchJSON('/api/runs?limit=20');
-  document.getElementById('runs').innerHTML = list.length
-    ? list.map(r => {
-        const cls = r.status === 'ok' ? 'ok' : 'err';
-        const dt = new Date(r.createdAt).toLocaleString('pt-BR');
-        const dur = r.durationMs ? `${(r.durationMs/1000).toFixed(1)}s` : '';
-        return `
-        <div class="run">
-          <div>${badge(r.status, cls)} <strong>${(r.briefing || '').slice(0, 80)}</strong></div>
-          <div class="meta">${dt} ${dur ? '· ' + dur : ''} ${r.productSlug ? '· ' + r.productSlug : ''}</div>
-          ${r.error ? `<div style="color:var(--err); font-size:12px; margin-top:4px;">${r.error}</div>` : ''}
-          <details><summary>detalhes</summary><pre>${JSON.stringify(r.plano || r, null, 2)}</pre></details>
-        </div>`;
-      }).join('')
-    : '<div class="empty">nenhuma execução ainda — dispara um briefing acima</div>';
+async function loadRuns(filter = 'all') {
+  const list = await api('/api/runs?limit=50');
+  $('kpiRuns').innerText = list.length;
+  $('kpiUltima').innerText = list[0] ? fmt(list[0].ts) : 'nenhuma';
+
+  // chart
+  const ok = list.filter(r => r.status === 'ok').length;
+  const err = list.filter(r => r.status === 'error').length;
+  if (runsChart) runsChart.destroy();
+  runsChart = new Chart($('runsChart').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Sucesso', 'Erro'],
+      datasets: [{ data: [ok, err], backgroundColor: ['#4ade80', '#ef4444'], borderWidth: 0 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, cutout: '65%',
+      plugins: { legend: { position: 'bottom' } } }
+  });
+
+  // feed
+  const filtered = list.filter(r => filter === 'all' || r.status === filter);
+  $('feedRuns').innerHTML = filtered.length === 0
+    ? '<li class="p-4 text-center text-gray-500">nenhuma execução ainda</li>'
+    : filtered.map(r => {
+      const color = r.status === 'ok' ? 'green' : 'red';
+      return `
+        <li class="p-4 hover:bg-gray-50 flex items-start gap-3 cursor-pointer" onclick="verRun('${r.id}')">
+          <div class="flex-shrink-0 w-10 h-10 rounded-full bg-${color}-50 text-${color}-600 border border-${color}-100 flex items-center justify-center text-lg">
+            ${r.status === 'ok' ? '✓' : '✗'}
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-bold truncate">${r.productSlug || '(sem produto)'} <span class="text-xs text-gray-400 font-normal">· ${r.durationMs}ms</span></p>
+            <p class="text-sm text-gray-600 mt-0.5 truncate">${r.briefing || ''}</p>
+          </div>
+          <div class="text-xs text-gray-400 whitespace-nowrap">${fmt(r.ts)}</div>
+        </li>`;
+    }).join('');
 }
 
-document.getElementById('run-btn').addEventListener('click', async () => {
-  const briefing = document.getElementById('briefing').value.trim();
-  const productSlug = document.getElementById('product-select').value || null;
-  if (!briefing) { alert('Escreve o briefing primeiro'); return; }
+window.verRun = async function(id) {
+  const r = await api('/api/runs/' + id);
+  openModal(`Run ${id.slice(0,8)} · ${r.status}`,
+    `<pre class="whitespace-pre-wrap text-xs">${JSON.stringify(r, null, 2)}</pre>`);
+};
 
-  const btn = document.getElementById('run-btn');
-  const status = document.getElementById('run-status');
-  btn.disabled = true; status.className = 'badge warn'; status.textContent = 'rodando CEO...';
-
+$('formRun').addEventListener('submit', async e => {
+  e.preventDefault();
+  const briefing = $('txtBriefing').value.trim();
+  const productSlug = $('selProduto').value;
+  if (!briefing) return alert('Escreva um briefing');
+  $('btnRun').disabled = true;
+  $('btnRun').innerText = '⏳ executando...';
+  openModal('🚀 Executando…', '<div class="flex flex-col items-center py-8"><div class="loader"></div><p class="text-sm text-gray-500 mt-4">CEO analisando, diretores roteando, workers gerando…</p></div>');
   try {
-    const r = await fetchJSON('/api/run', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
+    const res = await fetch('/api/run', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ briefing, productSlug })
     });
-    status.className = 'badge ok'; status.textContent = '✅ executado';
-    await loadRuns();
+    const data = await res.json();
+    if (!res.ok) {
+      openModal('❌ Erro', `<p class="text-red-600 font-medium">${data.error}</p>`);
+    } else {
+      $('txtBriefing').value = '';
+      openModal('✅ Concluído', `<pre class="whitespace-pre-wrap text-xs">${JSON.stringify(data.run, null, 2)}</pre>`);
+      loadRuns($('feedFilter').value);
+    }
   } catch (e) {
-    status.className = 'badge err'; status.textContent = '❌ ' + e.message;
+    openModal('❌ Erro', `<p class="text-red-600">${e.message}</p>`);
   } finally {
-    btn.disabled = false;
+    $('btnRun').disabled = false;
+    $('btnRun').innerText = '🚀 Executar';
   }
 });
 
-loadIntegrations();
-loadProducts();
-loadRuns();
-setInterval(loadRuns, 15000);
+$('btnInsight').addEventListener('click', () => {
+  $('txtBriefing').value = 'Analise saúde geral da operação e sugira 3 ações prioritárias para as próximas 48h.';
+  $('txtBriefing').focus();
+  $('txtBriefing').scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+$('btnRefresh').addEventListener('click', refreshAll);
+$('feedFilter').addEventListener('change', e => loadRuns(e.target.value));
+
+async function refreshAll() {
+  try {
+    await Promise.all([loadIntegracoes(), loadProdutos(), loadRuns($('feedFilter').value)]);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
+refreshAll();
+setInterval(() => loadRuns($('feedFilter').value), 15000);
 </script>
 </body>
 </html>
