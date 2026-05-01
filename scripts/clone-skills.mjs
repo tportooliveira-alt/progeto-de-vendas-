@@ -11,13 +11,15 @@ const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname.replace
 const VENDOR = path.join(ROOT, 'skills', '_vendor');
 
 const SKILLS = [
-  { dir: 'claude-ads',          repo: 'https://github.com/Pranav-Karra-3301/claude-ads' },
-  { dir: 'claude-seo',          repo: 'https://github.com/spences10/claude-seo' },
-  { dir: 'ai-marketing-claude', repo: 'https://github.com/Pranav-Karra-3301/ai-marketing-claude' },
-  { dir: 'caption-generator',   repo: 'https://github.com/jakeprins/social-media-caption-generator-claude' },
-  { dir: 'linkedin-skills',     repo: 'https://github.com/jeromebreche/linkedin-skills' },
-  { dir: 'awesome-claude-skills', repo: 'https://github.com/ComposioHQ/awesome-claude-skills' },
-  { dir: 'marketmenow',         repo: 'https://github.com/marketmenow/marketmenow' }
+  // Curadoria de base confiavel para skills, evals e frameworks de agentes.
+  { dir: 'awesome-mcp-servers', repo: 'https://github.com/punkpeye/awesome-mcp-servers' },
+  { dir: 'awesome-agent-skills', repo: 'https://github.com/heilcheng/awesome-agent-skills' },
+  { dir: 'awesome-claude-code', repo: 'https://github.com/hesreallyhim/awesome-claude-code' },
+  { dir: 'openai-evals', repo: 'https://github.com/openai/evals' },
+  { dir: 'microsoft-autogen', repo: 'https://github.com/microsoft/autogen' },
+  { dir: 'langchain', repo: 'https://github.com/langchain-ai/langchain' },
+  { dir: 'langsmith-sdk', repo: 'https://github.com/langchain-ai/langsmith-sdk' },
+  { dir: 'litellm', repo: 'https://github.com/BerriAI/litellm' }
 ];
 
 fs.mkdirSync(VENDOR, { recursive: true });
@@ -45,8 +47,13 @@ function main() {
   console.log(`📁 ${VENDOR}`);
 }
 
-// CLI only
-if (process.argv[1] && import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}`) {
+// CLI only (compatível com npm/node no Windows)
+const invokedAsScript =
+  !!process.argv[1] &&
+  (import.meta.url === `file://${process.argv[1].replace(/\\/g, '/')}` ||
+   process.argv[1].replace(/\\/g, '/').endsWith('/scripts/clone-skills.mjs'));
+
+if (invokedAsScript) {
   main();
 }
 
