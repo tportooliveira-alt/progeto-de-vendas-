@@ -10,6 +10,7 @@
   "scripts": {
     "ceo": "node agents/ceo/run.mjs",
     "smoke": "node scripts/smoke-test.mjs",
+    "smoke:mock": "set MOCK_AGENT_MODE=1&& node scripts/smoke-test.mjs",
     "new-product": "node scripts/new-product.mjs",
     "clone-skills": "node scripts/clone-skills.mjs",
     "telegram:dev": "node lib/telegram/server.mjs",

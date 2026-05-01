@@ -11,13 +11,17 @@ import { listProducts } from '../lib/products/loader.mjs';
 
 console.log('🔍 SMOKE TEST — agents-factory\n');
 
+const mockMode = (process.env.MOCK_AGENT_MODE || '0') === '1';
+
 const checks = [];
 
 // 1. ANTHROPIC_API_KEY
 checks.push({
   nome: 'ANTHROPIC_API_KEY',
-  ok: !!process.env.ANTHROPIC_API_KEY,
-  detalhe: process.env.ANTHROPIC_API_KEY ? 'configurada' : '❌ FALTA — preencha .env'
+  ok: !!process.env.ANTHROPIC_API_KEY || mockMode,
+  detalhe: mockMode
+    ? 'MOCK_AGENT_MODE=1 (teste offline sem custo)'
+    : (process.env.ANTHROPIC_API_KEY ? 'configurada' : '❌ FALTA — preencha .env')
 });
 
 // 2. Produtos
@@ -47,8 +51,8 @@ for (const c of checks) {
   console.log(`${c.ok ? '✅' : '❌'} ${c.nome}: ${c.detalhe}`);
 }
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  console.log('\n❌ Sem ANTHROPIC_API_KEY nao roda CEO. Preencha .env e tente de novo.');
+if (!process.env.ANTHROPIC_API_KEY && !mockMode) {
+  console.log('\n❌ Sem ANTHROPIC_API_KEY nao roda CEO. Preencha .env ou use MOCK_AGENT_MODE=1.');
   process.exit(1);
 }
 
