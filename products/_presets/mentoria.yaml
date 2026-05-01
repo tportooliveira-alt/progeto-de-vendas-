@@ -1,0 +1,24 @@
+# Preset: mentoria
+tipo: mentoria
+garantia_dias: 7
+oferta:
+  urgencia: "vagas limitadas (X slots/mes)"
+  bonus: ["acompanhamento-90d", "templates-prontos"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 2
+  lives_mes: 2
+partners:
+  comissao: 0.3                # margem alta mas servico de 1 pessoa
+  comissao_max_top: 0.4
+  oferta_extra: [leads-qualificados, co-branding, vaga-exclusiva]
+autonomia:
+  vendas: aprovacao_humana     # alta-ticket = sempre humano
+especifico:
+  modalidade: 1-1              # 1-1 | grupo
+  duracao_meses: 3
+  encontros_mes: 4
+  plataforma_call: zoom
+  agenda_url: ""               # calendly, savvycal etc
+  vagas_mes: 5

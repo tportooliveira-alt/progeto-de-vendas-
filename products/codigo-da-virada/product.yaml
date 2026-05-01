@@ -1,0 +1,139 @@
+slug: codigo-da-virada
+nome: Código da Virada
+tipo: ebook
+preco: 47
+moeda: BRL
+plataforma_venda: hotmart
+url_checkout: ""
+url_landing: ""
+garantia_dias: 7
+
+oferta:
+  promessa: "Sair do vermelho e organizar a vida financeira em 30 dias, mesmo ganhando pouco"
+  dor: "Endividamento crônico e sensação de não conseguir sair do sufoco"
+  prova:
+    - "Mais de 500 leitores aplicando o método"
+    - "Plano em 7 dias com checklist diário"
+  bonus:
+    - "Planilha de orçamento (XLSX + Google Sheets)"
+    - "Roteiro de negociação de dívidas"
+    - "Audiobook bônus"
+  urgencia: "preço promocional nos primeiros 7 dias"
+  garantia_extra: ""
+
+upsell:
+  - curso-virada-pro
+downsell:
+  - planilha-orcamento-light
+order_bumps: []
+
+avatar_cliente:
+  idade: "28-45"
+  genero: ambos
+  renda: "R$ 2-5k"
+  dor_principal: "Vive no vermelho todo mês mesmo trabalhando muito"
+  dor_secundaria: "Não sabe por onde começar a se organizar"
+  desejo: "Acordar tranquilo, sem boletos atrasados na cabeça"
+  objecoes:
+    - "Já comprei coisa que não funcionou"
+    - "Não tenho tempo pra ler"
+    - "Vai ser muito complicado"
+  onde_esta:
+    - "Instagram (@nathfinancas, @meunomeebreno)"
+    - "TikTok (#vidafinanceira)"
+    - "YouTube (canais de finanças pessoais)"
+
+brand:
+  voz: empatica-direta
+  cores_hex: ["#0F172A", "#10B981"]
+  fontes: ["Inter", "Poppins"]
+  proibido:
+    - "promessa de ficar rico rápido"
+    - "tom agressivo"
+    - "venda de furada"
+  obrigatorio:
+    - "garantia de 7 dias visível"
+    - "tom respeitoso com a dor financeira"
+
+persona_canal:
+  modelo: umbrella
+  nome: "Lia da Virada"
+  bio_curta: "Te ajudo a sair do vermelho sem mágica e sem furada."
+  avatar_heygen_id: ""
+  voz_elevenlabs_id: ""
+  estilo_visual: "limpo, fundo claro, texto grande"
+
+canais:
+  instagram: "@lia.davirada"
+  tiktok: "@lia.davirada"
+  youtube: ""
+  email: brevo
+  whatsapp: evolution
+  linkedin: ""
+  threads: ""
+
+ads:
+  ativo: false
+  budget_mensal: 0
+  plataformas: []
+  retargeting: true
+  pixels:
+    meta: ""
+    tiktok: ""
+    ga4: ""
+
+concorrentes:
+  - "@nathfinancas"
+  - "@meunomeebreno"
+  - "@meprestaatencaopf"
+
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 2
+  lives_mes: 1
+  newsletter_semana: 1
+
+partners:
+  ativo: true
+  comissao: 0.6
+  comissao_max_top: 0.8
+  scoring_min: 70
+  perfil_ideal:
+    plataformas: [instagram, tiktok, youtube]
+    seguidores_min: 5000
+    seguidores_max: 500000
+    engajamento_min: 0.03
+    nicho: ["financas pessoais", "saida da divida", "organizacao financeira"]
+  oferta_extra:
+    - leads-qualificados
+    - co-branding
+    - bonus-meta
+  kit_white_label: true
+
+autonomia:
+  conteudo: aprovacao_humana
+  ads: aprovacao_humana
+  parcerias: aprovacao_humana
+  carrinho_abandonado: autonomo
+  dms: semi
+  comentarios: semi
+  whatsapp: aprovacao_humana
+
+metas:
+  vendas_mes: 100
+  leads_mes: 1000
+  parceiros_ativos: 5
+  ticket_medio: 47
+
+especifico:
+  formato_entrega: pdf
+  paginas_estimadas: 80
+  capitulos:
+    - "Diagnóstico real do bolso"
+    - "Cortar o ralo"
+    - "Negociar dívidas"
+    - "Renda extra rápida"
+    - "Reserva de emergência"
+    - "Plano de 30 dias"
+  trecho_gratuito: "primeiros-2-capitulos"

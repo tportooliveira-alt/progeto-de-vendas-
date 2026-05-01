@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Build
+dist/
+build/
+.next/
+out/
+
+# Logs
+*.log
+npm-debug.log*
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Cache / runtime
+.cache/
+data/runtime/
+data/cache/
+
+# Skills clonadas (sao reclonadas via script)
+skills/_vendor/
+
+# Secrets/keys
+*.pem
+*.key
+service-account*.json

@@ -1,0 +1,21 @@
+# Preset: curso
+tipo: curso
+garantia_dias: 15
+oferta:
+  urgencia: "turma fecha em X dias"
+  bonus: ["mentoria-grupo", "comunidade-vip", "certificado"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 4
+  emails_semana: 3
+  lives_mes: 4
+partners:
+  comissao: 0.5
+  comissao_max_top: 0.6
+especifico:
+  area_membros: ""             # url ou plataforma (ex: hotmart-club)
+  modulos: []
+  drip_dias: 0                 # 0 = libera tudo
+  duracao_acesso: vitalicio    # vitalicio | 12-meses | etc
+  tem_certificado: true
+  carga_horaria: 0

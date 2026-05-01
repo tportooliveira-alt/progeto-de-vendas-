@@ -1,0 +1,21 @@
+# Preset: produto fisico
+tipo: fisico
+garantia_dias: 7                # legal: 7d apos recebimento
+oferta:
+  urgencia: "estoque limitado"
+  bonus: ["frete-gratis", "embalagem-presente"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 4
+  emails_semana: 2
+partners:
+  comissao: 0.2                 # margem menor por causa de logistica
+  oferta_extra: [bonus-meta, kit-influencer-fisico]
+especifico:
+  peso_g: 0
+  dimensoes_cm: ""              # LxAxP
+  estoque_atual: 0
+  prazo_envio_dias: 5
+  transportadora: correios
+  cep_origem: ""
+  unboxing_video: ""

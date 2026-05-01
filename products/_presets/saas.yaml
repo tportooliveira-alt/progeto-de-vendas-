@@ -1,0 +1,22 @@
+# Preset: SaaS
+tipo: saas
+garantia_dias: 14
+oferta:
+  urgencia: "preco early-bird"
+  bonus: ["onboarding-personalizado", "creditos-extras"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 2
+partners:
+  comissao: 0.3                # recorrente
+  recorrente: true
+  duracao_recorrencia_meses: 12
+especifico:
+  modelo: assinatura            # assinatura | uso | hibrido
+  ciclo: mensal                 # mensal | anual
+  trial_dias: 7
+  freemium: false
+  metrica_chave: MRR
+  features_principais: []
+  url_app: ""

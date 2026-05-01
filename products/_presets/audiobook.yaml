@@ -1,0 +1,18 @@
+# Preset: audiobook
+tipo: audiobook
+garantia_dias: 7
+oferta:
+  urgencia: "lancamento limitado"
+  bonus: ["transcricao-pdf", "ebook-bonus"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 2
+  emails_semana: 2
+partners:
+  comissao: 0.6
+especifico:
+  formato_entrega: mp3
+  duracao_horas: 0
+  narrador: ""
+  app_player: ""
+  trecho_gratuito_min: 5

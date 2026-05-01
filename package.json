@@ -1,0 +1,34 @@
+{
+  "name": "agents-factory",
+  "version": "0.1.0",
+  "description": "Fabrica autonoma de marketing+vendas+parcerias com agentes Claude",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "ceo": "node agents/ceo/run.mjs",
+    "smoke": "node scripts/smoke-test.mjs",
+    "new-product": "node scripts/new-product.mjs",
+    "clone-skills": "node scripts/clone-skills.mjs",
+    "telegram:dev": "node lib/telegram/server.mjs",
+    "hotmart:dev": "node lib/webhooks/hotmart.mjs",
+    "dashboard": "node dashboard/server.mjs",
+    "deploy:n8n": "bash scripts/deploy-n8n.sh"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "@supabase/supabase-js": "^2.45.0",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.0",
+    "node-cron": "^3.0.3",
+    "node-telegram-bot-api": "^0.66.0",
+    "yaml": "^2.6.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.0"
+  }
+}

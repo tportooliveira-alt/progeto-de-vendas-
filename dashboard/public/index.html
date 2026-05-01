@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>agents-factory — Dashboard</title>
+<style>
+  :root { --bg:#0b0f17; --card:#141a26; --border:#1f2937; --txt:#e5e7eb; --mute:#9ca3af; --ok:#10b981; --warn:#f59e0b; --err:#ef4444; --accent:#6366f1; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:-apple-system,Segoe UI,Roboto,sans-serif; background:var(--bg); color:var(--txt); }
+  header { padding:20px 28px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+  h1 { margin:0; font-size:18px; font-weight:600; }
+  .badge { display:inline-block; padding:3px 10px; border-radius:12px; font-size:11px; font-weight:600; }
+  .badge.ok { background:rgba(16,185,129,.15); color:var(--ok); }
+  .badge.warn { background:rgba(245,158,11,.15); color:var(--warn); }
+  .badge.err { background:rgba(239,68,68,.15); color:var(--err); }
+  main { display:grid; grid-template-columns: 320px 1fr; gap:20px; padding:20px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .card h2 { margin:0 0 12px; font-size:13px; text-transform:uppercase; letter-spacing:.5px; color:var(--mute); }
+  .row { display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid var(--border); }
+  .row:last-child { border-bottom:none; }
+  .row .name { font-size:13px; }
+  textarea { width:100%; min-height:90px; background:#0b0f17; color:var(--txt); border:1px solid var(--border); border-radius:8px; padding:10px; font-family:inherit; font-size:13px; resize:vertical; }
+  select, input { width:100%; background:#0b0f17; color:var(--txt); border:1px solid var(--border); border-radius:8px; padding:8px 10px; font-size:13px; }
+  button { background:var(--accent); color:white; border:none; border-radius:8px; padding:10px 18px; font-weight:600; cursor:pointer; font-size:13px; }
+  button:disabled { opacity:.5; cursor:not-allowed; }
+  button:hover:not(:disabled) { filter:brightness(1.1); }
+  .label { font-size:11px; text-transform:uppercase; color:var(--mute); margin:14px 0 6px; letter-spacing:.5px; }
+  .runs { max-height:600px; overflow-y:auto; }
+  .run { padding:10px; border:1px solid var(--border); border-radius:8px; margin-bottom:8px; cursor:pointer; transition:border-color .15s; }
+  .run:hover { border-color:var(--accent); }
+  .run .meta { font-size:11px; color:var(--mute); margin-top:4px; }
+  pre { background:#0b0f17; border:1px solid var(--border); border-radius:8px; padding:12px; overflow-x:auto; font-size:12px; color:var(--mute); }
+  .empty { color:var(--mute); font-size:12px; padding:8px 0; }
+  details summary { cursor:pointer; font-size:12px; color:var(--mute); margin-top:6px; }
+  details[open] summary { color:var(--txt); }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏭 agents-factory <span class="badge ok" id="health">online</span></h1>
+  <span class="badge ok" id="version">v0.1</span>
+</header>
+
+<main>
+  <aside>
+    <div class="card">
+      <h2>Integrações</h2>
+      <div id="integrations"><div class="empty">carregando...</div></div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h2>Produtos</h2>
+      <div id="products"><div class="empty">carregando...</div></div>
+    </div>
+  </aside>
+
+  <section>
+    <div class="card">
+      <h2>Disparar Briefing pro CEO</h2>
+      <div class="label">Produto</div>
+      <select id="product-select"><option value="">(geral, sem produto)</option></select>
+      <div class="label">Briefing</div>
+      <textarea id="briefing" placeholder="Ex: Pauta de conteúdo da semana, foco em parcerias com microinfluencers de finanças. Gerar 7 reels + 3 emails + 5 sugestões de criadores."></textarea>
+      <div style="margin-top:12px; display:flex; gap:8px; align-items:center;">
+        <button id="run-btn">🚀 Disparar</button>
+        <span id="run-status" class="badge"></span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h2>Últimas execuções</h2>
+      <div id="runs" class="runs"><div class="empty">carregando...</div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+async function fetchJSON(url, opts) {
+  const r = await fetch(url, opts);
+  if (!r.ok) throw new Error((await r.json()).error || r.statusText);
+  return r.json();
+}
+
+function badge(text, cls = '') { return `<span class="badge ${cls}">${text}</span>`; }
+
+async function loadIntegrations() {
+  const list = await fetchJSON('/api/integrations');
+  document.getElementById('integrations').innerHTML = list.map(i => `
+    <div class="row">
+      <span class="name">${i.nome}${i.required ? ' *' : ''}</span>
+      ${i.configurado ? badge('OK', 'ok') : badge('—', i.required ? 'err' : 'warn')}
+    </div>
+  `).join('');
+}
+
+async function loadProducts() {
+  const list = await fetchJSON('/api/products');
+  document.getElementById('products').innerHTML = list.length
+    ? list.map(p => `<div class="row"><span class="name">${p.nome}<br><small style="color:var(--mute);">${p.tipo} · R$${p.preco}</small></span></div>`).join('')
+    : '<div class="empty">nenhum produto. Use <code>npm run new-product</code></div>';
+
+  const sel = document.getElementById('product-select');
+  sel.innerHTML = '<option value="">(geral, sem produto)</option>' + list.map(p => `<option value="${p.slug}">${p.nome}</option>`).join('');
+}
+
+async function loadRuns() {
+  const list = await fetchJSON('/api/runs?limit=20');
+  document.getElementById('runs').innerHTML = list.length
+    ? list.map(r => {
+        const cls = r.status === 'ok' ? 'ok' : 'err';
+        const dt = new Date(r.createdAt).toLocaleString('pt-BR');
+        const dur = r.durationMs ? `${(r.durationMs/1000).toFixed(1)}s` : '';
+        return `
+        <div class="run">
+          <div>${badge(r.status, cls)} <strong>${(r.briefing || '').slice(0, 80)}</strong></div>
+          <div class="meta">${dt} ${dur ? '· ' + dur : ''} ${r.productSlug ? '· ' + r.productSlug : ''}</div>
+          ${r.error ? `<div style="color:var(--err); font-size:12px; margin-top:4px;">${r.error}</div>` : ''}
+          <details><summary>detalhes</summary><pre>${JSON.stringify(r.plano || r, null, 2)}</pre></details>
+        </div>`;
+      }).join('')
+    : '<div class="empty">nenhuma execução ainda — dispara um briefing acima</div>';
+}
+
+document.getElementById('run-btn').addEventListener('click', async () => {
+  const briefing = document.getElementById('briefing').value.trim();
+  const productSlug = document.getElementById('product-select').value || null;
+  if (!briefing) { alert('Escreve o briefing primeiro'); return; }
+
+  const btn = document.getElementById('run-btn');
+  const status = document.getElementById('run-status');
+  btn.disabled = true; status.className = 'badge warn'; status.textContent = 'rodando CEO...';
+
+  try {
+    const r = await fetchJSON('/api/run', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ briefing, productSlug })
+    });
+    status.className = 'badge ok'; status.textContent = '✅ executado';
+    await loadRuns();
+  } catch (e) {
+    status.className = 'badge err'; status.textContent = '❌ ' + e.message;
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+loadIntegrations();
+loadProducts();
+loadRuns();
+setInterval(loadRuns, 15000);
+</script>
+</body>
+</html>

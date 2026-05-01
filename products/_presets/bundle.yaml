@@ -1,0 +1,16 @@
+# Preset: bundle/combo
+tipo: bundle
+garantia_dias: 7
+oferta:
+  urgencia: "combo so durante a campanha"
+  bonus: ["desconto-agregado", "bonus-exclusivo-combo"]
+cadencia:
+  reels_por_dia: 2              # campanha intensiva
+  posts_estaticos_semana: 5
+  emails_semana: 3
+partners:
+  comissao: 0.5
+especifico:
+  produtos_inclusos: []         # lista de slugs
+  preco_individual_total: 0     # soma dos individuais (pra ancorar)
+  desconto_percent: 0

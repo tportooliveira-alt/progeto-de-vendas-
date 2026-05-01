@@ -1,0 +1,20 @@
+# Preset: ebook
+tipo: ebook
+garantia_dias: 7
+oferta:
+  urgencia: "preco sobe em 7 dias"
+  bonus: ["planilha-bonus", "checklist-bonus"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 2
+  lives_mes: 1
+partners:
+  comissao: 0.6
+  perfil_ideal:
+    plataformas: [instagram, tiktok, youtube]
+especifico:
+  formato_entrega: pdf
+  paginas_estimadas: 0
+  capitulos: []
+  trecho_gratuito: ""

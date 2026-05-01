@@ -1,0 +1,112 @@
+# Schema do product.yaml — referencia completa
+# Cada produto em products/<slug>/product.yaml herda o preset do tipo.
+
+slug: ""                       # id-da-url (kebab-case, unico)
+nome: ""                       # nome comercial
+tipo: ebook                    # ebook|planilha|audiobook|curso|mentoria|comunidade|evento|saas|microsaas|fisico|bundle|freemium|afiliacao|b2b
+preco: 0                       # numero (em moeda local)
+moeda: BRL
+plataforma_venda: hotmart      # hotmart|stripe|kiwify|hubla|propria
+url_checkout: ""
+url_landing: ""
+garantia_dias: 7
+
+oferta:
+  promessa: ""                 # transformacao prometida em 1 frase
+  dor: ""                      # dor principal do avatar
+  prova: []                    # depoimentos, casos, numeros
+  bonus: []                    # bonus inclusos (lista)
+  urgencia: ""                 # gatilho de escassez/urgencia
+  garantia_extra: ""           # garantia diferenciada (alem dos 7d legais)
+
+upsell: []                     # lista de slugs de produtos upsell
+downsell: []                   # lista de slugs de produtos downsell
+order_bumps: []                # itens adicionais no checkout
+
+avatar_cliente:
+  idade: ""                    # ex 28-45
+  genero: ""                   # ambos|f|m
+  renda: ""                    # ex R$ 2-5k
+  dor_principal: ""
+  dor_secundaria: ""
+  desejo: ""
+  objecoes: []                 # lista de objecoes principais
+  onde_esta: []                # canais/comunidades onde se concentra
+
+brand:
+  voz: ""                      # ex empatica-direta
+  cores_hex: []
+  fontes: []
+  proibido: []                 # promessas/tons proibidos
+  obrigatorio: []              # disclaimers, palavras-chave
+
+persona_canal:                 # quem aparece nos canais
+  modelo: umbrella             # umbrella (1 persona pra varios produtos) | por-produto
+  nome: ""
+  bio_curta: ""
+  avatar_heygen_id: ""
+  voz_elevenlabs_id: ""
+  estilo_visual: ""
+
+canais:
+  instagram: ""
+  tiktok: ""
+  youtube: ""
+  email: brevo
+  whatsapp: evolution
+  linkedin: ""
+  threads: ""
+
+ads:
+  ativo: false
+  budget_mensal: 0
+  plataformas: []              # [meta, tiktok, google, youtube]
+  retargeting: true
+  pixels:
+    meta: ""
+    tiktok: ""
+    ga4: ""
+
+concorrentes: []               # @handles ou urls a monitorar (Spy)
+
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 2
+  lives_mes: 0
+  newsletter_semana: 1
+
+partners:                      # PARTNER ENGINE
+  ativo: true
+  comissao: 0.5                # 0.0 - 1.0 (percentual)
+  comissao_max_top: 0.8        # teto pra top performers
+  scoring_min: 70              # InfluencerScout filtra >= esse score
+  perfil_ideal:
+    plataformas: [instagram, tiktok, youtube]
+    seguidores_min: 5000
+    seguidores_max: 500000
+    engajamento_min: 0.03      # 3%
+    nicho: []                  # palavras-chave de nicho
+  oferta_extra:                # bonus pra parceiro alem da comissao
+    - leads-qualificados
+    - co-branding
+    - bonus-meta
+  kit_white_label: true        # gera kit pronto
+
+autonomia:
+  conteudo: aprovacao_humana   # aprovacao_humana | semi | autonomo
+  ads: aprovacao_humana
+  parcerias: aprovacao_humana
+  carrinho_abandonado: autonomo
+  dms: semi
+  comentarios: semi
+  whatsapp: aprovacao_humana
+
+metas:
+  vendas_mes: 0
+  leads_mes: 0
+  parceiros_ativos: 0
+  ticket_medio: 0
+
+# Campos especificos por tipo (preenchidos pelo preset)
+especifico: {}

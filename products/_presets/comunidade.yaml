@@ -1,0 +1,23 @@
+# Preset: comunidade
+tipo: comunidade
+garantia_dias: 7
+oferta:
+  urgencia: "preco fundador (sobe apos 100 membros)"
+  bonus: ["onboarding-1-1", "biblioteca-conteudos"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 2
+  lives_mes: 4
+partners:
+  comissao: 0.4                # recorrente: comissao recorrente tambem
+  recorrente: true
+especifico:
+  modalidade: recorrente
+  ciclo: mensal                # mensal | anual
+  plataforma: ""               # circle | discord | telegram | hotmart-comunidade
+  rituais_semana: []           # lives, masterminds, q&a
+  anti_churn:
+    onboarding_dias: 7
+    checkpoint_dia: 25
+    win_back_dias: 35

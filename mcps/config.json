@@ -1,0 +1,42 @@
+{
+  "_comment": "Configuracao dos MCPs (Model Context Protocol) usados pelos agentes. Adicione este arquivo ao seu cliente Claude (Claude Desktop, Claude Code) ou referencie nos agentes via SDK.",
+  "_referencia": "Cada MCP precisa ser instalado separadamente. Veja docs/MCPs.md.",
+  "mcpServers": {
+    "meta-ads-ga4": {
+      "_repo": "https://github.com/elgranbarrigon/google-meta-ads-ga4-mcp",
+      "_uso": "puxa Meta Ads + Google Ads + GA4 (250+ ferramentas)",
+      "command": "npx",
+      "args": ["-y", "@elgranbarrigon/google-meta-ads-ga4-mcp"],
+      "env": {
+        "META_ADS_TOKEN": "${META_ADS_TOKEN}",
+        "META_AD_ACCOUNT_ID": "${META_AD_ACCOUNT_ID}",
+        "GA4_PROPERTY_ID": "${GA4_PROPERTY_ID}",
+        "GA4_CREDENTIALS_PATH": "${GA4_CREDENTIALS_PATH}"
+      }
+    },
+    "fb-ads-library": {
+      "_repo": "https://github.com/trypeggy/facebook-ads-library-mcp",
+      "_uso": "spy de criativos rodando dos concorrentes",
+      "command": "npx",
+      "args": ["-y", "fb-ads-library-mcp"]
+    },
+    "firecrawl": {
+      "_repo": "https://github.com/mendableai/firecrawl-mcp-server",
+      "_uso": "scraping AI-friendly de IG/TikTok/YouTube/sites",
+      "command": "npx",
+      "args": ["-y", "firecrawl-mcp"],
+      "env": {
+        "FIRECRAWL_API_KEY": "${FIRECRAWL_API_KEY}"
+      }
+    },
+    "youtube-data": {
+      "_repo": "https://github.com/ZubeidHendricks/youtube-mcp-server",
+      "_uso": "dados de canais YouTube (engajamento, estatisticas)",
+      "command": "npx",
+      "args": ["-y", "youtube-mcp-server"],
+      "env": {
+        "YOUTUBE_API_KEY": "${YOUTUBE_API_KEY}"
+      }
+    }
+  }
+}

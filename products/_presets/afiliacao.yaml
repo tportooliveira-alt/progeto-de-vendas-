@@ -1,0 +1,20 @@
+# Preset: afiliacao (promover produto de terceiro)
+tipo: afiliacao
+garantia_dias: 0                # nao se aplica
+oferta:
+  urgencia: ""                  # vem do produto-mae
+  bonus: []                     # bonus que VOCE da por cima da oferta-mae
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 1
+partners:                       # voce e parceiro, nao recruta
+  ativo: false
+especifico:
+  produto_mae:
+    nome: ""
+    produtor: ""
+    url_oficial: ""
+  link_afiliado: ""
+  comissao_recebida: 0          # quanto voce ganha por venda
+  bonus_proprios: []            # bonus que voce entrega alem

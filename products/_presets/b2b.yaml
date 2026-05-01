@@ -1,0 +1,28 @@
+# Preset: B2B / servico
+tipo: b2b
+garantia_dias: 0                # contratos B2B costumam ter regras proprias
+oferta:
+  urgencia: "vagas no roster trimestral limitadas"
+  bonus: ["diagnostico-gratuito", "auditoria-extra"]
+cadencia:
+  reels_por_dia: 0              # B2B prioriza outros canais
+  posts_estaticos_semana: 3     # LinkedIn principalmente
+  emails_semana: 2
+  newsletter_semana: 1
+canais:
+  linkedin: ""                  # principal
+  email: brevo
+  whatsapp: evolution
+partners:
+  ativo: false                  # B2B normalmente nao usa afiliados
+autonomia:
+  conteudo: aprovacao_humana
+  vendas: aprovacao_humana
+especifico:
+  modalidade: servico            # servico | produto | hibrido
+  ticket_medio: 0
+  ciclo_venda_dias: 30
+  buyer_persona: ""              # CEO | CMO | RH etc
+  proposta_url: ""
+  case_studies: []
+  agenda_url: ""                 # diagnostico inicial

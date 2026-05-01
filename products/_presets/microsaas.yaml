@@ -1,0 +1,19 @@
+# Preset: microSaaS
+tipo: microsaas
+garantia_dias: 7
+oferta:
+  urgencia: "preco lancamento"
+  bonus: ["templates-prontos", "suporte-direto"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 2
+  emails_semana: 2
+partners:
+  comissao: 0.4
+  recorrente: true
+especifico:
+  modelo: assinatura            # assinatura | one-shot
+  ciclo: mensal
+  nicho: ""
+  resolve_dor: ""               # 1 dor especifica e pequena
+  url_app: ""

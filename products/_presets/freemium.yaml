@@ -1,0 +1,20 @@
+# Preset: freemium
+tipo: freemium
+garantia_dias: 7
+oferta:
+  urgencia: "upgrade com desconto pra usuarios free"
+  bonus: ["recursos-pro", "suporte-prioritario"]
+cadencia:
+  reels_por_dia: 1
+  posts_estaticos_semana: 3
+  emails_semana: 3              # nutricao do free pra pago
+partners:
+  comissao: 0.3
+  recorrente: true
+especifico:
+  url_versao_free: ""
+  url_versao_pro: ""
+  limite_free: ""               # ex "5 usos/mes"
+  preco_pro_mensal: 0
+  preco_pro_anual: 0
+  conversao_free_pago_alvo: 0.05

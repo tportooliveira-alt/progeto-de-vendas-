@@ -1,0 +1,17 @@
+# Preset: planilha
+tipo: planilha
+garantia_dias: 7
+oferta:
+  urgencia: "lote limitado"
+  bonus: ["video-tutorial", "comunidade-suporte"]
+cadencia:
+  reels_por_dia: 2
+  posts_estaticos_semana: 4
+  emails_semana: 1
+partners:
+  comissao: 0.7                # low-ticket compensa com comissao maior
+especifico:
+  formato_entrega: xlsx
+  versoes: [google-sheets, excel]
+  recursos: []
+  video_demo: ""

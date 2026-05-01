@@ -1,0 +1,21 @@
+# Preset: evento
+tipo: evento
+garantia_dias: 7
+oferta:
+  urgencia: "data fixa: vagas terminam ou evento acontece"
+  bonus: ["replay-30d", "material-download", "grupo-vip-evento"]
+cadencia:
+  reels_por_dia: 2              # alta intensidade pre-evento
+  posts_estaticos_semana: 5
+  emails_semana: 3
+  lives_mes: 2
+partners:
+  comissao: 0.5
+especifico:
+  data_inicio: ""               # ISO
+  data_fim: ""
+  modalidade: online            # online | presencial | hibrido
+  plataforma: ""                # zoom | youtube-live | local
+  vagas_total: 0
+  cronograma: []
+  contagem_regressiva: true
