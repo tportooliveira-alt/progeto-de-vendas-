@@ -5,8 +5,9 @@
 import { callAgent } from '../../lib/claude-sdk/client.mjs';
 import { runCartRecovery } from './workers/cart-recovery.mjs';
 import { runLeadHunter } from './workers/lead-hunter.mjs';
+import { runProjectSeller } from './workers/project-seller.mjs';
 
-const SYSTEM = `Voce e Diretor de Vendas. Workers: cart_recovery, lead_hunter.
+const SYSTEM = `Voce e Diretor de Vendas. Workers: cart_recovery, lead_hunter, project_seller.
 Decida quais acionar dada a tarefa do CEO. Saida JSON: { acoes:[{worker, instrucao}] }.`;
 
 export async function runDirector({ tarefa, productSlug }) {
@@ -21,6 +22,7 @@ export async function runDirector({ tarefa, productSlug }) {
   for (const a of plano.acoes || []) {
     if (a.worker === 'cart_recovery') out.cart_recovery = await runCartRecovery({ instrucao: a.instrucao, productSlug });
     else if (a.worker === 'lead_hunter') out.lead_hunter = await runLeadHunter({ instrucao: a.instrucao, productSlug });
+    else if (a.worker === 'project_seller') out.project_seller = await runProjectSeller({ instrucao: a.instrucao, productSlug });
   }
   return out;
 }
