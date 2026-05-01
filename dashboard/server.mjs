@@ -43,10 +43,17 @@ app.get('/api/health', (_, res) => {
 });
 
 app.get('/api/integrations', (_, res) => {
+  const anthropicActive = !!(process.env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY_CHEAP);
   const keys = [
-    ['Anthropic (CEO)', 'ANTHROPIC_API_KEY', true],
+    ['Anthropic ativo (base ou cheap)', '__ANTHROPIC_ACTIVE__', true],
+    ['Anthropic base', 'ANTHROPIC_API_KEY'],
+    ['Anthropic cheap', 'ANTHROPIC_API_KEY_CHEAP'],
+    ['Anthropic premium', 'ANTHROPIC_API_KEY_PREMIUM'],
+    ['Custo: optimize simple', 'COST_OPTIMIZE_SIMPLE'],
     ['Telegram', 'TELEGRAM_BOT_TOKEN'],
     ['Supabase', 'SUPABASE_URL'],
+    ['Instagram Graph', 'INSTAGRAM_ACCESS_TOKEN'],
+    ['Instagram Business ID', 'INSTAGRAM_BUSINESS_ACCOUNT_ID'],
     ['Metricool', 'METRICOOL_USER_TOKEN'],
     ['Brevo (email)', 'BREVO_API_KEY'],
     ['Evolution (WhatsApp)', 'EVOLUTION_URL'],
@@ -57,7 +64,10 @@ app.get('/api/integrations', (_, res) => {
     ['Firecrawl', 'FIRECRAWL_API_KEY']
   ];
   res.json(keys.map(([nome, env, required]) => ({
-    nome, env, required: !!required, configurado: !!process.env[env]
+    nome,
+    env,
+    required: !!required,
+    configurado: env === '__ANTHROPIC_ACTIVE__' ? anthropicActive : !!process.env[env]
   })));
 });
 
@@ -91,8 +101,8 @@ app.get('/api/runs/:id', (req, res) => {
 app.post('/api/run', async (req, res) => {
   const { briefing, productSlug } = req.body || {};
   if (!briefing) return res.status(400).json({ error: 'briefing obrigatorio' });
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return res.status(503).json({ error: 'ANTHROPIC_API_KEY nao configurada' });
+  if (!process.env.ANTHROPIC_API_KEY && !process.env.ANTHROPIC_API_KEY_CHEAP) {
+    return res.status(503).json({ error: 'ANTHROPIC_API_KEY (ou ANTHROPIC_API_KEY_CHEAP) nao configurada' });
   }
 
   // executa em background
